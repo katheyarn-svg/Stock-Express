@@ -1,0 +1,68 @@
+<!-- ... existing code ... -->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Stock Express — Tienda vs. Almacén</title>
+  <style>
+<!-- ... existing code ... -->
+    <header>
+      <div class="header-top">
+        <div class="brand">
+          <h1>Stock Express</h1>
+          <p id="headerSubtitle">Tienda vs. Almacén · Modo local</p>
+        </div>
+        <div style="display:flex; gap:6px; align-items:center;">
+<!-- ... existing code ... -->
+  <script>
+    const STORAGE_KEY = "stockrapido_v3_data";
+    const GEMINI_KEY_STORAGE = "stockrapido_gemini_key";
+    const SUPABASE_CONFIG_KEY = "stockrapido_supabase_cfg_v1";
+
+    const DEFAULT_PRODUCTS = [
+<!-- ... existing code ... -->
+    function loadSupabaseConfig() {
+      try {
+        const raw = localStorage.getItem(SUPABASE_CONFIG_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          return {
+            url: (parsed.url || "").trim(),
+            anonKey: (parsed.anonKey || "").trim(),
+            teamCode: (parsed.teamCode || "stock-express").trim()
+          };
+        }
+      } catch (e) {}
+      return { url: "", anonKey: "", teamCode: "stock-express" };
+    }
+
+    let sbConfig = loadSupabaseConfig();
+<!-- ... existing code ... -->
+    function openSyncModal() {
+      document.getElementById("sbTeamCode").value = sbConfig.teamCode || "stock-express";
+      document.getElementById("sbUrl").value = sbConfig.url || "";
+      document.getElementById("sbAnonKey").value = sbConfig.anonKey || "";
+      syncModal.classList.add("open");
+    }
+<!-- ... existing code ... -->
+    document.getElementById("syncForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      sbConfig = {
+        teamCode: (document.getElementById("sbTeamCode").value || "stock-express").trim(),
+        url: (document.getElementById("sbUrl").value || "").trim().replace(/\/+$/, ""),
+        anonKey: (document.getElementById("sbAnonKey").value || "").trim()
+      };
+      localStorage.setItem(SUPABASE_CONFIG_KEY, JSON.stringify(sbConfig));
+<!-- ... existing code ... -->
+    document.getElementById("pullNowBtn").addEventListener("click", async () => {
+      sbConfig = {
+        teamCode: (document.getElementById("sbTeamCode").value || "stock-express").trim(),
+        url: (document.getElementById("sbUrl").value || "").trim().replace(/\/+$/, ""),
+        anonKey: (document.getElementById("sbAnonKey").value || "").trim()
+      };
+      localStorage.setItem(SUPABASE_CONFIG_KEY, JSON.stringify(sbConfig));
+<!-- ... existing code ... -->
+    document.getElementById("disconnectSyncBtn").addEventListener("click", async () => {
+      sbConfig = { url: "", anonKey: "", teamCode: "stock-express" };
+      localStorage.setItem(SUPABASE_CONFIG_KEY, JSON.stringify(sbConfig));
+      if (sbChannel && sbClient) {
+<!-- ... existing code ... -->
